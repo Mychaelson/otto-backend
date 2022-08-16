@@ -12,10 +12,43 @@ class balanceService extends Service {
 
       return this.handleSuccess({
         data: {
-          balance: balanceInfo.balance,
+          balance: balanceInfo.balance.toLocaleString(),
         },
         statusCode: 200,
         message: "User Balance Found",
+      });
+    } catch (err) {
+      console.log(err);
+      return this.handleError({
+        message: "Server Error",
+        statusCode: 500,
+      });
+    }
+  };
+
+  static topUpBalance = async ({ token, topUp }) => {
+    try {
+      const user = verifyToken(token);
+      const userId = user.id;
+
+      const amount = parseInt(topUp);
+
+      const findUser = await User.findByPk(userId);
+
+      await User.update(
+        {
+          balance: findUser.balance + amount,
+        },
+        {
+          where: {
+            id: userId,
+          },
+        }
+      );
+
+      return this.handleSuccess({
+        message: "Top Up Successful",
+        statusCode: 200,
       });
     } catch (err) {
       console.log(err);
