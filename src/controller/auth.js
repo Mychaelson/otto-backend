@@ -37,7 +37,6 @@ const authController = {
 
   userInfo: async (req, res) => {
     try {
-      console.log(req.headers.authorization);
       const serviceResult = await AuthService.userInfo(
         req.headers.authorization
       );

@@ -14,9 +14,10 @@ const PORT = process.env.PORT || 2000;
 app.use(cors());
 app.use(express.json());
 
-const { authRouter } = require("./routes");
+const { authRouter, balanceRouter } = require("./routes");
 
 app.use("/auth", authRouter);
+app.use("/balance", balanceRouter);
 
 app.use("/", (req, res) => {
   res.send("<h1>OTTO BACKEND DEVELOPER TEST</h1>");

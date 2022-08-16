@@ -20,6 +20,7 @@ const User = (sequelize) => {
     balance: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: 0,
     },
   });
 };
