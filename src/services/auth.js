@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const { User } = require("../lib/sequelize");
 const Service = require("./service");
 const bcrypt = require("bcrypt");
+const { generateToken } = require("../lib/jwt");
 
 class AuthService extends Service {
   static registerUser = async ({ full_name, username, email, password }) => {
@@ -67,8 +68,10 @@ class AuthService extends Service {
 
       delete findUser.dataValues.password;
 
+      const token = generateToken({ id: findUser.id });
+
       return this.handleSuccess({
-        data: findUser,
+        data: { user: findUser, token },
         statusCode: 200,
         message: "User Logged In",
       });
@@ -80,6 +83,18 @@ class AuthService extends Service {
       });
     }
   };
+
+  // static userInfo = async (userId) => {
+  //   try {
+  //     const user
+  //   } catch (err) {
+  //     console.log(err);
+  //     return this.handleError({
+  //       message: "Server Error",
+  //       statusCode: 500,
+  //     });
+  //   }
+  // }
 }
 
 module.exports = AuthService;
