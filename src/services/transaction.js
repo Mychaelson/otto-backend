@@ -35,7 +35,7 @@ class TransactionService extends Service {
 
       const transactionDetailData = transaction.data.data;
 
-      const createTransaction = await Transaction.create({
+      await Transaction.create({
         category: transactionDetailData.category,
         product: transactionDetailData.product,
         description: transactionDetailData.description,
@@ -48,6 +48,31 @@ class TransactionService extends Service {
       return this.handleSuccess({
         statusCode: 200,
         message: "Transaction Confirm",
+      });
+    } catch (err) {
+      console.log(err);
+      return this.handleError({
+        message: "Server Error",
+        statusCode: 500,
+      });
+    }
+  };
+
+  static getTransactionHistory = async (token) => {
+    try {
+      const user = verifyToken(token);
+      const userId = user.id;
+
+      const getTransactionHistory = await Transaction.findAndCountAll({
+        where: {
+          userId,
+        },
+      });
+
+      return this.handleSuccess({
+        data: getTransactionHistory,
+        statusCode: 200,
+        message: "Transaction History Found",
       });
     } catch (err) {
       console.log(err);
