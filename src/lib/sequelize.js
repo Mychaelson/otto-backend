@@ -11,8 +11,13 @@ const sequelize = new Sequelize({
 });
 
 const User = require("../models/user")(sequelize);
+const Transaction = require("../models/transaction")(sequelize);
+
+Transaction.belongsTo(User);
+User.hasMany(Transaction);
 
 module.exports = {
   sequelize,
   User,
+  Transaction,
 };
